@@ -8,6 +8,8 @@ import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +25,9 @@ public class CategoryService {
     private CategoryRepository repository;
 
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
-    public List<CategoryDTO> findAll() {
-        List<Category> listCategory = repository.findAll();
-        List<CategoryDTO> listCategoryDto = new ArrayList<>();
+    public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
+        Page<Category> pageCategory = repository.findAll(pageRequest);
+        Page<CategoryDTO> pageCategoryDto;
 
         /*   Forma de implementar o DTO sem o lambda
         for(Category cat: listCategory){
@@ -34,9 +36,9 @@ public class CategoryService {
         */
 
         //usando expressão lambda
-        listCategoryDto = listCategory.stream().map(cat -> new CategoryDTO(cat)).collect(Collectors.toList());
+        pageCategoryDto = pageCategory.map(cat -> new CategoryDTO(cat));
 
-        return listCategoryDto;
+        return pageCategoryDto;
     }
 
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
