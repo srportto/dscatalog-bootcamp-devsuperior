@@ -1,7 +1,10 @@
 package com.devsuperior.dscatalog.services;
 
+import com.devsuperior.dscatalog.dto.CategoryDTO;
 import com.devsuperior.dscatalog.dto.ProductDTO;
+import com.devsuperior.dscatalog.entities.Category;
 import com.devsuperior.dscatalog.entities.Product;
+import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -19,11 +22,14 @@ import java.util.Optional;
 @Service
 public class ProductService {
     @Autowired
-    private ProductRepository repository;
+    private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
     public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {
-        Page<Product> pageProduct = repository.findAll(pageRequest);
+        Page<Product> pageProduct = productRepository.findAll(pageRequest);
         return  pageProduct.map(product -> new ProductDTO(product));
     }
 
@@ -31,7 +37,7 @@ public class ProductService {
     public ProductDTO findById(Long id) {
 
         //Captura objeto de um optional e tratar a exceção
-        Optional<Product> optionalProduct = repository.findById(id);
+        Optional<Product> optionalProduct = productRepository.findById(id);
         Product product = optionalProduct.orElseThrow(() -> new ResourceNotFoundException("Recurso nao encontrado"));
 
         //usando o construtor de ProductDTO que recebe Product e a lista de Categorias do mesmo
@@ -42,8 +48,11 @@ public class ProductService {
     @Transactional
     public ProductDTO insert(ProductDTO productDTO) {
         Product entity = new Product();
-      //  entity.setName(productDTO.getName());
-        entity = repository.save(entity);
+
+        // invocacao do metodo que transforma dto em entity ao moldes do BD para posterior save/update
+        copyDtoToEntity(productDTO, entity);
+
+        entity = productRepository.save(entity);
 
         return new ProductDTO(entity);
     }
@@ -52,13 +61,14 @@ public class ProductService {
     public ProductDTO update(Long id, ProductDTO productDTO) {
 
         try {
-            Product entity = repository.getOne(id); //getOne atribui o id ao usuario sem ir ao banco, so vai no banco no save
-         //  entity.setName(productDTO.getName());
+            Product entity = productRepository.getOne(id); //getOne atribui o id ao usuario sem ir ao banco, so vai no banco no save
 
-            entity = repository.save(entity);
+            // invocacao do metodo que transforma dto em entity ao moldes do BD para posterior save/update
+            copyDtoToEntity(productDTO, entity);
+
+            entity = productRepository.save(entity);
 
             return new ProductDTO(entity);
-
 
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Id nao encontrado " + id);
@@ -68,7 +78,7 @@ public class ProductService {
 
     public void delete(Long id) {
         try {
-            repository.deleteById(id);
+            productRepository.deleteById(id);
         }catch (EmptyResultDataAccessException e){
             throw new ResourceNotFoundException("Id nao encontrado " + id);
         }
@@ -76,4 +86,22 @@ public class ProductService {
             throw new DatabaseException("Violacao de integridade");
         }
     }
+
+    private  void copyDtoToEntity(ProductDTO dto, Product entity){
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setDate(dto.getDate());
+        entity.setImgUrl(dto.getImgUrl());
+        entity.setPrice(dto.getPrice());
+
+        entity.getCategories().clear(); // antes de adicionar as categorias advindas do Dto, limpa-se a do objeto em questao
+
+        // para cada categoria (catDto) adivinda do list de Categorias (dto.getCategories), passe uma a uma para a entidade
+        for (CategoryDTO catDdo : dto.getCategories()){
+            Category category = categoryRepository.getOne(catDdo.getId()); //instanciando uma categoria sem tocar no banco de dados, mas gera aos moldes do banco
+            entity.getCategories().add(category);
+        }
+
+    }
+
 }
