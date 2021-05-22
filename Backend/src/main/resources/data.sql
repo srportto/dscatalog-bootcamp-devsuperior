@@ -1,6 +1,18 @@
 INSERT INTO tb_category (name, created_At) VALUES ('Livros', NOW());
 INSERT INTO tb_category (name, created_At) VALUES ('Eletrônicos', NOW());
 INSERT INTO tb_category (name, created_At) VALUES ('Computadores', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('moda', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('geek', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('nerd', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('casa', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('banho', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('sala', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('moveis', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('limpeza', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('sustentavel', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('criancas', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('ferias', NOW());
+INSERT INTO tb_category (name, created_At) VALUES ('bebes', NOW());
 
 INSERT INTO tb_product (name, price, date, description, img_url) VALUES ('The Lord of the Rings', 90.5, TIMESTAMP WITH TIME ZONE '2020-07-13T20:50:07.12345Z', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg');
 INSERT INTO tb_product (name, price, date, description, img_url) VALUES ('Smart TV', 2190.0, TIMESTAMP WITH TIME ZONE '2020-07-14T10:00:00Z', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg');

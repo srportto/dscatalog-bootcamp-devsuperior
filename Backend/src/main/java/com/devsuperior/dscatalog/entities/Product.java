@@ -31,11 +31,11 @@ public class Product implements Serializable {
     private Double price;
     private String imgUrl;
 
-    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE") //definindo pra gravar a data no formato utc
     private Instant date;
 
     @ManyToMany
-    @JoinTable(name = "tb_product_category", //nome da tabela de relacionamento do manyToMany
+    @JoinTable(name = "tb_product_category", //nome da tabela de relacionamento do manyToMany(uma 3° tab. so pro relacionamento)
     joinColumns = @JoinColumn(name ="product_id" ),
     inverseJoinColumns = @JoinColumn(name = "category_id")
     )

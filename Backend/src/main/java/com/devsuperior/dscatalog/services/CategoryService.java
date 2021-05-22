@@ -27,18 +27,10 @@ public class CategoryService {
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
     public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
         Page<Category> pageCategory = repository.findAll(pageRequest);
-        Page<CategoryDTO> pageCategoryDto;
 
-        /*   Forma de implementar o DTO sem o lambda
-        for(Category cat: listCategory){
-            listCategoryDto.add(new CategoryDTO(cat)); // para cada item da lista de caregoria simples add a list DTO
-        }
-        */
+        System.out.println("Passou aqui : \n"+pageCategory.getContent() + "\nFim ---------------------");
 
-        //usando expressão lambda
-        pageCategoryDto = pageCategory.map(cat -> new CategoryDTO(cat));
-
-        return pageCategoryDto;
+        return pageCategory.map(cat -> new CategoryDTO(cat));
     }
 
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
