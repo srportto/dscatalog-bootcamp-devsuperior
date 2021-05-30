@@ -9,15 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -25,11 +22,8 @@ public class CategoryService {
     private CategoryRepository repository;
 
     @Transactional(readOnly = true) //para não travar o recurso no banco nas operacoes de somente leitura
-    public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
-        Page<Category> pageCategory = repository.findAll(pageRequest);
-
-        System.out.println("Passou aqui : \n"+pageCategory.getContent() + "\nFim ---------------------");
-
+    public Page<CategoryDTO> findAllPaged(Pageable pageable) {
+        Page<Category> pageCategory = repository.findAll(pageable);
         return pageCategory.map(cat -> new CategoryDTO(cat));
     }
 

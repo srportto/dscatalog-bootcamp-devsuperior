@@ -13,6 +13,7 @@ import java.time.Instant;
 @ControllerAdvice
 public class ResourceExceptionHandler {
     //classe manipuladora de exceções da camada de resources/controllers
+    // ou seja, toda excecao lançada nos controllers é interceptada aqui , similar aos middlewares do JS
 
     @ExceptionHandler(ResourceNotFoundException.class) //intercepta o lancamento de execoes desse tipo
     public ResponseEntity<StandardError> entityNotFound(ResourceNotFoundException error, HttpServletRequest req){
